@@ -6,9 +6,8 @@ import type React from "react"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Dogão do Pastor - Sistema de Vouchers",
+  title: "Dogão do Pastor - ERP",
   description: "Sistema de gerenciamento de vouchers para evento Dogão do Pastor",
-  generator: 'v0.dev'
 }
 
 export default function RootLayout({
