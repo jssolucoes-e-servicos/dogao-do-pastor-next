@@ -111,7 +111,7 @@ export default function VoucherPage() {
             <div className="mx-auto mb-4 h-12 w-12 rounded-full bg-blue-600 flex items-center justify-center">
               <Info className="h-6 w-6 text-white" />
             </div>
-            <CardTitle className="text-xl">Voucher Já Validado</CardTitle>
+            <CardTitle className="text-xl">Voucher Já Validado!</CardTitle>
           </CardHeader>
           <CardContent className="text-center">
             <Alert>
