@@ -97,6 +97,7 @@ export default function EdicoesPage() {
 
     try {
       const response = await fetch("/api/editions", {
+        cache: "no-store",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -134,6 +135,7 @@ export default function EdicoesPage() {
   const handleToggleActive = async (editionId: string) => {
     try {
       const response = await fetch("/api/editions", {
+        cache: "no-store",
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -165,6 +167,7 @@ export default function EdicoesPage() {
   const handleToggleProduction = async (editionId: string) => {
     try {
       const response = await fetch("/api/editions", {
+        cache: "no-store",
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -210,6 +213,7 @@ export default function EdicoesPage() {
 
     try {
       const response = await fetch("/api/editions/manual-sale", {
+        cache: "no-store",
         method: "POST",
         headers: {
           "Content-Type": "application/json",
