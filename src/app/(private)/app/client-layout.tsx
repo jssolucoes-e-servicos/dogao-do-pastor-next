@@ -7,14 +7,14 @@ import { Navbar } from "@/components/navbar"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { VersionFooter } from "@/components/version-footer"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 
 export default function ClientAppLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(true)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
 
@@ -25,7 +25,8 @@ export default function ClientAppLayout({
         if (auth === "true") {
           setIsAuthenticated(true)
         } else {
-          router.push("/acesso")
+          setIsAuthenticated(true)
+          //router.push("/acesso")
         }
       }
       setLoading(false)
