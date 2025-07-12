@@ -1,11 +1,13 @@
-import { type NextRequest, NextResponse } from "next/server"
+import type { Edition, Sale } from "@/lib/models/database"
 import clientPromise from "@/lib/mongodb"
-import type { Sale, Edition } from "@/lib/models/database"
+import { type NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { cellName, quantity, editionId } = body
+    const { cellName, quantity } = body
+
+    const editionId = '68703b3580b075178fc218ad';
 
     if (!cellName || !quantity || !editionId) {
       return NextResponse.json({ error: "Todos os campos são obrigatórios" }, { status: 400 })
