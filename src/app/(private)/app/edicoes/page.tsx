@@ -1,17 +1,17 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { Calendar, Clock, DollarSign, Package, Plus, Settings, Users } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { CELL_GROUPS } from "@/lib/models/database"
+import { Calendar, Clock, DollarSign, Package, Settings, Users } from "lucide-react"
+import { useEffect, useState } from "react"
 
 interface Edition {
   _id: string
@@ -48,6 +48,7 @@ export default function EdicoesPage() {
     customCellGroup: "",
     quantity: 1,
     unitPrice: 19.99,
+    editionId: '68703b3580b075178fc218ad'
   })
 
   const { toast } = useToast()
@@ -267,10 +268,10 @@ export default function EdicoesPage() {
             <Users className="h-4 w-4 mr-2" />
             Venda Manual
           </Button>
-          <Button onClick={() => setShowCreateModal(true)}>
+          {/*  <Button onClick={() => setShowCreateModal(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Edição
-          </Button>
+          </Button>*/}
         </div>
       </div>
 
