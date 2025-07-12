@@ -103,18 +103,17 @@ export interface Config {
 
 // Constantes
 export const AVAILABLE_INGREDIENTS = [
-  "Maionese",
-  "Ketchup",
-  "Mostarda",
-  "Molho Especial",
-  "Alface",
-  "Tomate",
-  "Cebola",
-  "Milho",
-  "Ervilha",
   "Batata Palha",
+  "Ervilha",
+  "Ketchup",
+  "Maionese",
+  "Milho",
+  "Molho 4 Queijos",
+  "Molho vermelho",
+  "Mostarda",
+  "Pão",
   "Queijo",
-  "Presunto",
+  "Salsicha",
 ]
 
 export const PAYMENT_METHODS = [
@@ -123,7 +122,6 @@ export const PAYMENT_METHODS = [
   { value: "cartao_debito", label: "Cartão de Débito" },
   { value: "cartao_credito", label: "Cartão de Crédito" },
   { value: "ticket_dogao", label: "Ticket Dogão" },
-  { value: "voucher", label: "Voucher" },
 ]
 
 export const DELIVERY_TYPES = [
