@@ -18,7 +18,7 @@ interface Edition {
   nome: string
   dataProducao: string
   horarioFechamento: string
-  quantidadeTotal: number
+  limiteEdicao: number
   quantidadeVendida: number
   valorDog: number
   ativa: boolean
@@ -35,12 +35,15 @@ export default function EdicoesPage() {
   const [showTotalModal, setShowTotalModal] = useState(false)
   const [totalToReceive, setTotalToReceive] = useState(0)
 
+  const _valorDog = 19.99;
+  const _edition = '68703b3580b075178fc218ad';
+
   const [newEdition, setNewEdition] = useState({
     nome: "",
     dataProducao: "",
     horarioFechamento: "19:00",
-    quantidadeTotal: 500,
-    valorDog: 19.99,
+    limiteEdicao: 500,
+    valorDog: _valorDog,
   })
 
   const [manualSale, setManualSale] = useState({
@@ -48,7 +51,7 @@ export default function EdicoesPage() {
     customCellGroup: "",
     quantity: 1,
     unitPrice: 19.99,
-    editionId: '68703b3580b075178fc218ad'
+    editionId: _edition
   })
 
   const { toast } = useToast()
@@ -111,7 +114,7 @@ export default function EdicoesPage() {
           nome: "",
           dataProducao: "",
           horarioFechamento: "19:00",
-          quantidadeTotal: 500,
+          limiteEdicao: 500,
           valorDog: 19.99,
         })
         loadEditions()
@@ -203,7 +206,7 @@ export default function EdicoesPage() {
       return
     }
 
-    const total = manualSale.quantity * manualSale.unitPrice
+    const total = manualSale.quantity * _valorDog
 
     try {
       const response = await fetch("/api/editions/manual-sale", {
@@ -212,11 +215,11 @@ export default function EdicoesPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          cellGroup: cellGroupName,
+          cellName: cellGroupName,
           quantity: manualSale.quantity,
-          unitPrice: manualSale.unitPrice,
+          unitPrice: _valorDog,
           totalValue: total,
-          editionId: manualSale.editionId
+          editionId: _edition
         }),
       })
 
@@ -228,8 +231,8 @@ export default function EdicoesPage() {
           cellGroup: "",
           customCellGroup: "",
           quantity: 1,
-          unitPrice: 19.99,
-          editionId: '68703b3580b075178fc218ad'
+          unitPrice: _valorDog,
+          editionId: _edition
         })
         loadEditions()
       } else {
@@ -307,7 +310,7 @@ export default function EdicoesPage() {
                 <Package className="h-4 w-4 text-muted-foreground" />
                 <div>
                   <p className="text-sm font-medium">Total</p>
-                  <p className="text-2xl font-bold">{activeEdition.quantidadeTotal}</p>
+                  <p className="text-2xl font-bold">{activeEdition.limiteEdicao}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -322,7 +325,7 @@ export default function EdicoesPage() {
                 <div>
                   <p className="text-sm font-medium">Disponível</p>
                   <p className="text-2xl font-bold text-blue-600">
-                    {activeEdition.quantidadeTotal - activeEdition.quantidadeVendida}
+                    {activeEdition.limiteEdicao - activeEdition.quantidadeVendida}
                   </p>
                 </div>
               </div>
@@ -380,15 +383,15 @@ export default function EdicoesPage() {
             <CardContent>
               <div className="flex justify-between text-sm">
                 <span>
-                  Vendidos: {edition.quantidadeVendida}/{edition.quantidadeTotal}
+                  Vendidos: {edition.quantidadeVendida}/{edition.limiteEdicao}
                 </span>
-                <span>Disponível: {edition.quantidadeTotal - edition.quantidadeVendida}</span>
+                <span>Disponível: {edition.limiteEdicao - edition.quantidadeVendida}</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                 <div
                   className="bg-green-600 h-2 rounded-full"
                   style={{
-                    width: `${Math.min((edition.quantidadeVendida / edition.quantidadeTotal) * 100, 100)}%`,
+                    width: `${Math.min((edition.quantidadeVendida / edition.limiteEdicao) * 100, 100)}%`,
                   }}
                 ></div>
               </div>
@@ -436,8 +439,8 @@ export default function EdicoesPage() {
                 <Label>Quantidade Total</Label>
                 <Input
                   type="number"
-                  value={newEdition.quantidadeTotal}
-                  onChange={(e) => setNewEdition({ ...newEdition, quantidadeTotal: Number(e.target.value) })}
+                  value={newEdition.limiteEdicao}
+                  onChange={(e) => setNewEdition({ ...newEdition, limiteEdicao: Number(e.target.value) })}
                 />
               </div>
               <div className="space-y-2">
@@ -511,7 +514,7 @@ export default function EdicoesPage() {
                   onChange={(e) => setManualSale({ ...manualSale, quantity: Number(e.target.value) })}
                 />
               </div>
-              <div className="space-y-2">
+              {/*  <div className="space-y-2">
                 <Label>Valor Unitário</Label>
                 <Input
                   type="number"
@@ -519,7 +522,7 @@ export default function EdicoesPage() {
                   value={manualSale.unitPrice}
                   onChange={(e) => setManualSale({ ...manualSale, unitPrice: Number(e.target.value) })}
                 />
-              </div>
+              </div> */}
             </div>
 
             <Separator />
