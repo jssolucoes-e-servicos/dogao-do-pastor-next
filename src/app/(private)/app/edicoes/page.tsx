@@ -216,6 +216,7 @@ export default function EdicoesPage() {
           quantity: manualSale.quantity,
           unitPrice: manualSale.unitPrice,
           totalValue: total,
+          editionId: manualSale.editionId
         }),
       })
 
@@ -228,6 +229,7 @@ export default function EdicoesPage() {
           customCellGroup: "",
           quantity: 1,
           unitPrice: 19.99,
+          editionId: '68703b3580b075178fc218ad'
         })
         loadEditions()
       } else {
