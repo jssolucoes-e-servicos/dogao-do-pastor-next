@@ -235,7 +235,7 @@ export default function EntregasPage() {
                 {orders.map((order) => (
                   <TableRow key={order._id}>
                     <TableCell className="font-mono font-bold">#{order.orderNumber}</TableCell>
-                    <TableCell className="font-medium">{order.customerName}</TableCell>
+                    <TableCell className="font-medium">{order.customerName}{order.isTelevendas === true && (` - ${order.customerHour}`)}</TableCell>
                     <TableCell>{order.customerPhone}</TableCell>
                     <TableCell className="max-w-xs truncate">{order.customerAddress}</TableCell>
                     <TableCell>
