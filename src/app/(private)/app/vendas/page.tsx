@@ -1,13 +1,14 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { LoadingSpinner } from "@/components/loading"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { DollarSign, ShoppingCart, Gift, CreditCard, RefreshCw, Eye } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ORDER_STATUS } from "@/lib/models/database"
+import { CreditCard, DollarSign, Eye, Gift, RefreshCw, ShoppingCart } from "lucide-react"
+import { useEffect, useState } from "react"
 
 export default function VendasPage() {
   const [sales, setSales] = useState<any[]>([])
@@ -88,9 +89,7 @@ export default function VendasPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-      </div>
+      <LoadingSpinner />
     )
   }
 
