@@ -1,6 +1,6 @@
 export const APP_VERSION_MAJOR = 1;
 export const APP_VERSION_MINOR = 0;
-export const APP_VERSION_BUILD = 21;
+export const APP_VERSION_BUILD = 22;
 export const APP_NAME = "Dogão do Pastor"
 export const APP_DESCRIPTION = "Sistema de Gerenciamento de Vouchers e Vendas"
 
