@@ -9,7 +9,9 @@ export async function validateVoucher(code: string): Promise<boolean> {
     const res = await fetch(`/api/voucher/validate-for-redeem/${code}`, {
       cache: "no-store",
     })
-    return res.ok
+    const data = await res.json();
+    console.log(data);
+    return res.ok;
   } catch {
     return false
   }

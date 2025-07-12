@@ -1,23 +1,23 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { AlertTriangle, Gift, Plus, Printer, ShoppingCart, Trash2 } from "lucide-react"
+import { useEffect, useState } from "react"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
+import { useToast } from "@/hooks/use-toast"
 import { AVAILABLE_INGREDIENTS, DELIVERY_TYPES, PAYMENT_METHODS } from "@/lib/models/database"
 import { validateVoucher } from "@/lib/voucher"
-import { useToast } from "@/hooks/use-toast"
 
 interface SaleItem {
   id: string
@@ -52,8 +52,11 @@ export default function PDVPage() {
   // voucher
   const [voucherData, setVoucherData] = useState({
     voucherCode: "",
-    customerName: "",
-    customerPhone: "",
+    customer: {
+      name: "",
+      phone: "",
+      cpf: ""
+    },
     removedIngredients: [] as string[],
     isValidated: false,
   })
@@ -493,6 +496,8 @@ Obrigado!`
                     value={voucherData.voucherCode}
                     onChange={(e) => {
                       const code = e.target.value.toUpperCase()
+
+
                       setVoucherData({ ...voucherData, voucherCode: code })
                       if (code.length >= 6)
                         validateVoucher(code).then((isValid) =>
@@ -504,14 +509,17 @@ Obrigado!`
                     }}
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label>Cliente</Label>
-                  <Input value={voucherData.customerName} disabled />
-                </div>
-                <div className="space-y-2">
-                  <Label>Telefone</Label>
-                  <Input value={voucherData.customerPhone} disabled />
-                </div>
+                {voucherData.isValidated && (<>
+                  <div className="space-y-2">
+                    <Label>Cliente</Label>
+                    <Label>{voucherData.customer.name}  </Label>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Telefone</Label>
+                    <Label>{voucherData.customer.phone}</Label>
+                  </div>
+                </>)}
+
               </div>
 
               {voucherData.isValidated && (

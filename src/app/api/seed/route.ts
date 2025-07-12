@@ -1,12 +1,12 @@
-import { type NextRequest, NextResponse } from "next/server"
-import clientPromise from "@/lib/mongodb"
 import type { Edition } from "@/lib/models/database"
+import clientPromise from "@/lib/mongodb"
+import { type NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest) {
   try {
     const { authorization } = await request.json()
 
-    if (authorization !== "dogao2024") {
+    if (authorization !== "dogao2025") {
       return NextResponse.json({ error: "Não autorizado" }, { status: 401 })
     }
 
@@ -78,17 +78,16 @@ export async function GET() {
     const editions = await db.collection("editions").find({}).toArray()
     const voucherUsage = await db.collection("voucher_usage").find({}).toArray()
     const sales = await db.collection("sales").find({}).toArray()
+    const dogs = await db.collection("sale_items").find({}).toArray()
 
     // Buscar edição ativa
     const activeEdition = await db.collection("editions").findOne({ ativa: true })
 
     // Calcular vendas que contam no limite (excluir vouchers e tickets)
     const countedSales = await db
-      .collection("sales")
+      .collection("sale_items")
       .find({
-        countInSales: { $ne: false },
-        isVoucher: { $ne: true },
-        isTicket: { $ne: true },
+        countInSales: { $ne: true },
       })
       .toArray()
 
@@ -107,6 +106,7 @@ export async function GET() {
         totalVouchers: vouchers.length,
         usedVouchers: vouchers.filter((v) => v.used).length,
         activeEdition: activeEdition,
+        dogs: dogs,
         totalSoldCount, // Quantidade real vendida (que conta no limite)
         availableCount: activeEdition ? activeEdition.limiteEdicao - totalSoldCount : 0,
       },
