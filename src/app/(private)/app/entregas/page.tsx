@@ -17,6 +17,7 @@ export default function EntregasPage() {
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [showAssignModal, setShowAssignModal] = useState(false)
+  const [showFinishedModal, setShowFinishedModal] = useState(false)
   const [selectedOrder, setSelectedOrder] = useState<any>(null)
   const [selectedDeliveryPerson, setSelectedDeliveryPerson] = useState("")
   const { toast } = useToast()
@@ -98,9 +99,46 @@ export default function EntregasPage() {
     }
   }
 
+  const assignDelivered = async () => {
+    if (!selectedOrder) return
+
+    try {
+      const response = await fetch("/api/delivery-queue/finished", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          orderId: selectedOrder._id,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        toast({
+          title: "Pedido entregue com sucesso",
+          description: `Pedido #${selectedOrder.orderNumber} Finalizado`,
+        })
+        setShowFinishedModal(false)
+        setSelectedOrder(null)
+        await fetchOrders()
+      } else {
+        throw new Error(data.error)
+      }
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Erro",
+        description: error.message,
+      })
+    }
+  }
+
   const stats = {
     ready: orders.filter((o) => o.status === "ready").length,
     outForDelivery: orders.filter((o) => o.status === "out_for_delivery").length,
+    delivered: orders.filter((o) => o.status === "delivered").length,
     total: orders.length,
   }
 
@@ -126,10 +164,10 @@ export default function EntregasPage() {
       </div>
 
       {/* Estatísticas */}
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Prontos</CardTitle>
+            <CardTitle className="text-sm font-medium">Aguardando</CardTitle>
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -139,7 +177,7 @@ export default function EntregasPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Saíram para Entrega</CardTitle>
+            <CardTitle className="text-sm font-medium">Em rota</CardTitle>
             <Truck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -156,6 +194,17 @@ export default function EntregasPage() {
             <div className="text-2xl font-bold">{stats.total}</div>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Entregues</CardTitle>
+            <Package className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.delivered}</div>
+          </CardContent>
+        </Card>
+
       </div>
 
       {/* Fila de Entregas */}
@@ -191,7 +240,7 @@ export default function EntregasPage() {
                     <TableCell className="max-w-xs truncate">{order.customerAddress}</TableCell>
                     <TableCell>
                       <Badge variant={order.status === "ready" ? "default" : "secondary"}>
-                        {order.status === "ready" ? "Pronto" : "Saiu para Entrega"}
+                        {order.status === "ready" ? "Pronto" : order.status === "delivered" ? "Entregue" : "Saiu para Entrega"}
                       </Badge>
                     </TableCell>
                     <TableCell>
@@ -212,6 +261,19 @@ export default function EntregasPage() {
                         >
                           <Send className="h-4 w-4 mr-1" />
                           Enviar
+                        </Button>
+                      )}
+
+                      {order.status === "out_for_delivery" && (
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            setSelectedOrder(order)
+                            setShowFinishedModal(true)
+                          }}
+                        >
+                          <Send className="h-4 w-4 mr-1" />
+                          Entregue
                         </Button>
                       )}
                     </TableCell>
@@ -253,6 +315,26 @@ export default function EntregasPage() {
                 Atribuir e Enviar
               </Button>
               <Button variant="outline" onClick={() => setShowAssignModal(false)}>
+                Cancelar
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de finalização */}
+      <Dialog open={showFinishedModal} onOpenChange={setShowFinishedModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirmar entrega</DialogTitle>
+            <DialogDescription>O pedido #{selectedOrder?.orderNumber} foi realmente entregue?</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="flex gap-2 pt-4">
+              <Button onClick={assignDelivered} className="flex-1">
+                Finalizar
+              </Button>
+              <Button variant="outline" onClick={() => setShowFinishedModal(false)}>
                 Cancelar
               </Button>
             </div>
