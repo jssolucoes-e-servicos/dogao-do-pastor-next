@@ -43,6 +43,7 @@ export default function PDVPage() {
     customerName: "",
     customerPhone: "",
     customerAddress: "",
+    customerHour: "Agora",
     paymentMethod: "",
     deliveryType: "pickup",
     ticketNumbers: [] as string[],
@@ -249,6 +250,7 @@ export default function PDVPage() {
         customerName: "",
         customerPhone: "",
         customerAddress: "",
+        customerHour: "Agora",
         paymentMethod: "",
         deliveryType: "pickup",
         ticketNumbers: [],
@@ -370,19 +372,35 @@ Obrigado!`
                 </div>
 
                 {saleData.deliveryType === "televendas" && (
-                  <div className="space-y-2">
-                    <Label>Endereço *</Label>
-                    <Input
-                      value={saleData.customerAddress}
-                      onChange={(e) =>
-                        setSaleData({
-                          ...saleData,
-                          customerAddress: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
+                  <>
+                    <div className="space-y-2">
+                      <Label>Endereço *</Label>
+                      <Input
+                        value={saleData.customerAddress}
+                        onChange={(e) =>
+                          setSaleData({
+                            ...saleData,
+                            customerAddress: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Horario *</Label>
+                      <Input
+                        value={saleData.customerHour}
+                        onChange={(e) =>
+                          setSaleData({
+                            ...saleData,
+                            customerHour: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </>
                 )}
+
+
 
                 <Separator />
 

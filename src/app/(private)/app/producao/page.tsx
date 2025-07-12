@@ -1,12 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { ChefHat, Clock, ArrowRight, RefreshCw } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { ArrowRight, ChefHat, Clock, RefreshCw } from "lucide-react"
+import { useEffect, useState } from "react"
 
 export default function ProducaoPage() {
   const [orders, setOrders] = useState<any[]>([])
@@ -157,7 +157,7 @@ export default function ProducaoPage() {
                 {orders.map((order) => (
                   <TableRow key={order._id}>
                     <TableCell className="font-mono font-bold">#{order.orderNumber}</TableCell>
-                    <TableCell className="font-medium">{order.customerName}</TableCell>
+                    <TableCell className="font-medium">{order.customerName} {order.isTelevendas === true && (` - ${order.customerHour}`)}</TableCell>
                     <TableCell>
                       <div className="space-y-1">
                         {order.items?.map((item: any, index: number) => (
