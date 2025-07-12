@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server"
 import clientPromise from "@/lib/mongodb"
+import { NextResponse } from "next/server"
 
 export async function GET() {
   try {
@@ -41,6 +41,7 @@ export async function GET() {
         total: orders.length,
         ready: orders.filter((o) => o.status === "ready").length,
         outForDelivery: orders.filter((o) => o.status === "out_for_delivery").length,
+        delivered: orders.filter((o) => o.status === "delivered").length,
       },
       {
         headers: {
