@@ -23,7 +23,6 @@ import {
   Home,
   MessageSquare,
   QrCode,
-  Settings,
   ShoppingCart,
   Ticket,
   Truck,
@@ -72,6 +71,11 @@ const menuItems = [
   {
     title: "Fila de Entregas",
     url: "/app/entregas",
+    icon: Truck,
+  },
+  {
+    title: "Retirada no Balcão",
+    url: "/app/retiradas",
     icon: Truck,
   },
   {

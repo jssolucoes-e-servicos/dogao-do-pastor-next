@@ -157,7 +157,7 @@ export default function ProducaoPage() {
                 {orders.map((order) => (
                   <TableRow key={order._id}>
                     <TableCell className="font-mono font-bold">#{order.orderNumber}</TableCell>
-                    <TableCell className="font-medium">{order.customerName} {order.isTelevendas === true && (` - ${order.customerHour}`)}</TableCell>
+                    <TableCell className="font-medium">{order.customerName} {order.isTelevendas === true && (` - ENTREGA ÀS ${order.customerHour}`)}</TableCell>
                     <TableCell>
                       <div className="space-y-1">
                         {order.items?.map((item: any, index: number) => (

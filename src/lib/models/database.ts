@@ -133,6 +133,7 @@ export const ORDER_STATUS = [
   { value: "pending", label: "Pendente" },
   { value: "preparing", label: "Preparando" },
   { value: "ready", label: "Pronto" },
+  { value: "expedition", label: "Balcão" }
   { value: "out_for_delivery", label: "Saiu para Entrega" },
   { value: "delivered", label: "Entregue" },
   { value: "cancelled", label: "Cancelado" },

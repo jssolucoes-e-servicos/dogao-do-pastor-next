@@ -4,14 +4,12 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { useToast } from "@/hooks/use-toast"
 import { Package, RefreshCw, Send, Truck } from "lucide-react"
 import { useEffect, useState } from "react"
 
-export default function EntregasPage() {
+export default function RetiradasPage() {
   const [orders, setOrders] = useState<any[]>([])
   const [deliveryPersons, setDeliveryPersons] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -32,13 +30,13 @@ export default function EntregasPage() {
     try {
       setOrders([])
       setLoading(true)
-      const response = await fetch(`/api/delivery-queue?t=${Date.now()}`, {
+      const response = await fetch(`/api/delivery-queue/retireds?t=${Date.now()}`, {
         cache: "no-store",
       })
       const data = await response.json()
       setOrders(data.orders || [])
     } catch (error) {
-      console.error("Erro ao buscar fila de entregas:", error)
+      console.error("Erro ao buscar fila de retiradas:", error)
     } finally {
       setLoading(false)
     }
@@ -154,8 +152,8 @@ export default function EntregasPage() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Fila de Entregas</h1>
-          <p className="text-muted-foreground">Controle de pedidos para entrega</p>
+          <h1 className="text-3xl font-bold tracking-tight">Fila de Retiradas</h1>
+          <p className="text-muted-foreground">Controle de pedidos para retirada</p>
         </div>
         <Button onClick={handleRefresh} disabled={refreshing} variant="outline">
           <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? "animate-spin" : ""}`} />
@@ -210,8 +208,8 @@ export default function EntregasPage() {
       {/* Fila de Entregas */}
       <Card>
         <CardHeader>
-          <CardTitle>Pedidos para Entrega</CardTitle>
-          <CardDescription>Pedidos prontos ou saindo para entrega</CardDescription>
+          <CardTitle>Pedidos para Retirada</CardTitle>
+          <CardDescription>Pedidos prontos no balção</CardDescription>
         </CardHeader>
         <CardContent>
           {orders.length === 0 ? (
@@ -225,9 +223,7 @@ export default function EntregasPage() {
                   <TableHead>Pedido</TableHead>
                   <TableHead>Cliente</TableHead>
                   <TableHead>Telefone</TableHead>
-                  <TableHead>Endereço</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Entregador</TableHead>
                   <TableHead>Ações</TableHead>
                 </TableRow>
               </TableHeader>
@@ -237,34 +233,13 @@ export default function EntregasPage() {
                     <TableCell className="font-mono font-bold">#{order.orderNumber}</TableCell>
                     <TableCell className="font-medium">{order.customerName}{order.isTelevendas === true && (` - ENTREGA ÀS ${order.customerHour}`)}</TableCell>
                     <TableCell>{order.customerPhone}</TableCell>
-                    <TableCell className="max-w-xs truncate">{order.customerAddress}</TableCell>
                     <TableCell>
-                      <Badge variant={order.status === "ready" ? "default" : "secondary"}>
-                        {order.status === "ready" ? "Pronto" : order.status === "delivered" ? "Entregue" : "Saiu para Entrega"}
+                      <Badge variant={order.status === "expedition" ? "default" : "secondary"}>
+                        {order.status === "expedition" ? "Pronto" : "Entregue"}
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      {order.deliveryPersonName ? (
-                        <Badge variant="outline">{order.deliveryPersonName}</Badge>
-                      ) : (
-                        <span className="text-muted-foreground">Não atribuído</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {order.status === "ready" && (
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            setSelectedOrder(order)
-                            setShowAssignModal(true)
-                          }}
-                        >
-                          <Send className="h-4 w-4 mr-1" />
-                          Enviar
-                        </Button>
-                      )}
-
-                      {order.status === "out_for_delivery" && (
+                      {order.status === "expedition" && (
                         <Button
                           size="sm"
                           onClick={() => {
@@ -285,42 +260,7 @@ export default function EntregasPage() {
         </CardContent>
       </Card>
 
-      {/* Modal de Atribuição */}
-      <Dialog open={showAssignModal} onOpenChange={setShowAssignModal}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Atribuir Entregador</DialogTitle>
-            <DialogDescription>Selecione um entregador para o pedido #{selectedOrder?.orderNumber}</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label>Entregador</Label>
-              <Select value={selectedDeliveryPerson} onValueChange={setSelectedDeliveryPerson}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecione um entregador" />
-                </SelectTrigger>
-                <SelectContent>
-                  {deliveryPersons
-                    .filter((dp) => dp.isActive)
-                    .map((dp) => (
-                      <SelectItem key={dp._id} value={dp._id}>
-                        {dp.name} - {dp.phone}
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex gap-2 pt-4">
-              <Button onClick={assignDeliveryPerson} disabled={!selectedDeliveryPerson} className="flex-1">
-                Atribuir e Enviar
-              </Button>
-              <Button variant="outline" onClick={() => setShowAssignModal(false)}>
-                Cancelar
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+
 
       {/* Modal de finalização */}
       <Dialog open={showFinishedModal} onOpenChange={setShowFinishedModal}>
